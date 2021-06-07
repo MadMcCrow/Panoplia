@@ -92,15 +92,15 @@ void UPanopliaOutfitComponent::OnMeshLoad()
 
 USkeletalMeshComponent* UPanopliaOutfitComponent::SpawnMeshComponent()
 {
-	if (auto CharOwner = Cast<ACharacter>(GetOwner()))
+	if (GetOwner())
 	{
-		const FName NewMeshName = MakeUniqueObjectName(CharOwner,USkeletalMeshComponent::StaticClass(),SpawnedComponentBaseName);
-		USkeletalMeshComponent* NewNeshComp = NewObject<USkeletalMeshComponent>(CharOwner, NewMeshName);
+		const FName NewMeshName = MakeUniqueObjectName(GetOwner(),USkeletalMeshComponent::StaticClass(),SpawnedComponentBaseName);
+		USkeletalMeshComponent* NewNeshComp = NewObject<USkeletalMeshComponent>(GetOwner(), NewMeshName);
 		if(NewNeshComp)
 		{
 			NewNeshComp->RegisterComponent();
-			NewNeshComp->AttachToComponent(CharOwner->GetMesh(), FAttachmentTransformRules::KeepWorldTransform, NAME_None);
-			NewNeshComp->SetMasterPoseComponent(CharOwner->GetMesh());
+			NewNeshComp->AttachToComponent(GetMasterSkeletalMesh(), FAttachmentTransformRules::KeepWorldTransform, NAME_None);
+			NewNeshComp->SetMasterPoseComponent(GetMasterSkeletalMesh());
 			LayeredMeshComponents.Add(NewNeshComp);
 			return NewNeshComp;
 		}
@@ -113,4 +113,14 @@ void UPanopliaOutfitComponent::RemoveMeshComponent(USkeletalMeshComponent* Mesh)
 	LayeredMeshComponents.Remove(Mesh);
 	Mesh->UnregisterComponent();
 	Mesh->DestroyComponent();
+}
+
+
+USkeletalMeshComponent*  UPanopliaOutfitComponent::GetMasterSkeletalMesh() const
+{
+	if (auto CharOwner = Cast<ACharacter>(GetOwner()))
+	{
+		return CharOwner->GetMesh();
+	}
+	return nullptr;
 }

@@ -17,7 +17,7 @@ class USkeletalMesh;
  *	@note	Will Load your Mesh in an ASync fashion !
  *	@todo	add merging
  */
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Within="Character")
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PANOPLIA_API UPanopliaOutfitComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -79,6 +79,8 @@ private:
 	 */
 	UPROPERTY(Transient)
 	TArray<USkeletalMeshComponent*> LayeredMeshComponents;
+
+	USkeletalMeshComponent*  GetMasterSkeletalMesh() const;
 
 
 
